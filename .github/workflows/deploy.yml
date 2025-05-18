@@ -42,6 +42,12 @@ jobs:
       - name: Inicializar o Terraform
         run: terraform init
 
+      - name: Importar função Lambda existente (caso exista)
+        run: terraform import aws_lambda_function.check_user check-user || true
+
+      - name: Validar o Terraform
+        run: terraform validate
+
       - name: Validar o Terraform
         run: terraform validate
 
