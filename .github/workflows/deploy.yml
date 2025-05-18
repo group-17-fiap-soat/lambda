@@ -34,8 +34,8 @@ jobs:
         run: |
           mkdir -p build
           cp -r check_user/* build/
-
-          docker run --rm -v "$PWD/build":/var/task \
+          
+          docker run --rm -u $(id -u):$(id -g) -v "$PWD/build":/var/task \
             amazonlinux:2 bash -c "\
               yum install -y gcc postgresql-devel python3 python3-devel zip && \
               pip3 install --upgrade pip && \
