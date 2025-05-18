@@ -22,18 +22,14 @@ jobs:
 
       - name: Compactar a função Lambda
         run: |
-          cd lambda/check_user
+          cd check_user
           zip -r ../check_user.zip .
-          cd ..
 
       - name: Inicializar o Terraform
-        working-directory: lambda
         run: terraform init
 
       - name: Validar o Terraform
-        working-directory: lambda
         run: terraform validate
 
       - name: Aplicar alterações com Terraform
-        working-directory: lambda
         run: terraform apply -auto-approve
