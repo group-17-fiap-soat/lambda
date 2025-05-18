@@ -41,11 +41,9 @@ jobs:
               pip3 install --upgrade pip && \
               pip3 install -r /var/task/requirements.txt -t /var/task && \
               cd /var/task && \
-              zip -r check_user.zip . && \
-              chown -R 1000:1000 /var/task"
+              zip -r lambda.zip ."
 
-      - name: Mover .zip para raiz do projeto
-        run: mv build/check_user.zip check_user.zip
+          cp build/lambda.zip check_user.zip
 
       - name: Verificar conteúdo do .zip
         run: unzip -l check_user.zip
