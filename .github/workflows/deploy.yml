@@ -46,9 +46,9 @@ jobs:
         run: |
           terraform import aws_lambda_function.check_user check-user || true
           terraform import aws_apigatewayv2_api.auth 06vrwdm931 || true
-          terraform import aws_apigatewayv2_stage.default 06vrwdm931/$default || true
-          terraform import aws_apigatewayv2_integration.lambda_integration xxbygpq || true
-          terraform import aws_apigatewayv2_route.auth_route kjhwxon || true
+          terraform import aws_apigatewayv2_stage.default 06vrwdm931/\$default || true
+          terraform import aws_apigatewayv2_integration.lambda_integration 06vrwdm931/xxbygpq || true
+          terraform import aws_apigatewayv2_route.auth_route 06vrwdm931/kjhwxon || true
           terraform import aws_lambda_permission.allow_apigw check-user/AllowInvoke || true
 
       - name: Validar o Terraform
