@@ -27,20 +27,27 @@ jobs:
 
       - name: Limpar build anterior (se existir)
         run: |
-          if [ -f check_user.zip ]; then rm check_user.zip; fi
-          if [ -d check_user/__pycache__ ]; then rm -rf check_user/__pycache__; fi
+          rm -f check_user.zip
+          rm -rf build
 
-      - name: Instalar dependências
+      - name: Preparar pacote Lambda compatível (via Docker Amazon Linux 2)
         run: |
-          pip install -r check_user/requirements.txt -t check_user/
-
-      - name: Compactar a função Lambda
-        run: |
-          cd check_user
-          zip -r ../check_user.zip .
+          mkdir -p build
+          cp -r check_user/* build/
+          
+          docker run --rm -v "$PWD/build":/var/task \
+            amazonlinux:2 bash -c "\
+              yum install -y gcc postgresql-devel python3 python3-devel zip && \
+              pip3 install --upgrade pip && \
+              pip3 install -r /var/task/requirements.txt -t /var/task && \
+              cd /var/task && \
+              zip -r /var/task/../check_user.zip ."
 
       - name: Verificar conteúdo do .zip
         run: unzip -l check_user.zip
+
+      - name: Limpar build temporário
+        run: rm -rf build
 
       - name: Inicializar o Terraform
         run: terraform init
@@ -53,9 +60,6 @@ jobs:
           terraform import aws_apigatewayv2_integration.lambda_integration 06vrwdm931/xxbygpq || true
           terraform import aws_apigatewayv2_route.auth_route 06vrwdm931/kjhwxon || true
           terraform import aws_lambda_permission.allow_apigw check-user/AllowInvoke || true
-
-      - name: Validar o Terraform
-        run: terraform validate
 
       - name: Validar o Terraform
         run: terraform validate
