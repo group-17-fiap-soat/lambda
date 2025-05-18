@@ -30,14 +30,17 @@ jobs:
           if [ -f check_user.zip ]; then rm check_user.zip; fi
           if [ -d check_user/__pycache__ ]; then rm -rf check_user/__pycache__; fi
 
+      - name: Instalar dependências
+        run: |
+          pip install -r check_user/requirements.txt -t check_user/
+
       - name: Compactar a função Lambda
         run: |
           cd check_user
           zip -r ../check_user.zip .
 
-      - name: Instalar dependências
-        run: |
-          pip install -r check_user/requirements.txt -t check_user/
+      - name: Verificar conteúdo do .zip
+        run: unzip -l check_user.zip
 
       - name: Inicializar o Terraform
         run: terraform init
