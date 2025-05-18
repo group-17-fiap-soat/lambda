@@ -34,14 +34,17 @@ jobs:
         run: |
           mkdir -p build
           cp -r check_user/* build/
-          
+
           docker run --rm -v "$PWD/build":/var/task \
             amazonlinux:2 bash -c "\
               yum install -y gcc postgresql-devel python3 python3-devel zip && \
               pip3 install --upgrade pip && \
               pip3 install -r /var/task/requirements.txt -t /var/task && \
               cd /var/task && \
-              zip -r /var/task/../check_user.zip ."
+              zip -r check_user.zip ."
+
+      - name: Mover .zip para raiz do projeto
+        run: mv build/check_user.zip check_user.zip
 
       - name: Verificar conteúdo do .zip
         run: unzip -l check_user.zip
