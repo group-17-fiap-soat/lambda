@@ -9,10 +9,6 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: lambda
-
     steps:
       - name: Checkout do código
         uses: actions/checkout@v3
@@ -26,15 +22,18 @@ jobs:
 
       - name: Compactar a função Lambda
         run: |
-          cd check_user
+          cd lambda/check_user
           zip -r ../check_user.zip .
           cd ..
 
       - name: Inicializar o Terraform
+        working-directory: lambda
         run: terraform init
 
       - name: Validar o Terraform
+        working-directory: lambda
         run: terraform validate
 
       - name: Aplicar alterações com Terraform
+        working-directory: lambda
         run: terraform apply -auto-approve
