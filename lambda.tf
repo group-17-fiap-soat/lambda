@@ -46,7 +46,7 @@ resource "aws_apigatewayv2_api" "auth" {
 resource "aws_apigatewayv2_integration" "lambda_integration" {
   api_id                 = aws_apigatewayv2_api.auth.id
   integration_type       = "AWS_PROXY"
-  integration_uri        = aws_lambda_function.check_user_email.invoke_arn
+  integration_uri        = aws_lambda_function.check_user.invoke_arn
   integration_method     = "POST"
   payload_format_version = "2.0"
 }
