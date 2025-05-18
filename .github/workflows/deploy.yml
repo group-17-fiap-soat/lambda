@@ -28,13 +28,13 @@ jobs:
       - name: Limpar build anterior (se existir)
         run: |
           rm -f check_user.zip
-          rm -rf build
+          rm -rf build || true
 
       - name: Preparar pacote Lambda compatível (via Docker Amazon Linux 2)
         run: |
           mkdir -p build
           cp -r check_user/* build/
-          
+
           docker run --rm -v "$PWD/build":/var/task \
             amazonlinux:2 bash -c "\
               yum install -y gcc postgresql-devel python3 python3-devel zip && \
@@ -42,7 +42,7 @@ jobs:
               pip3 install -r /var/task/requirements.txt -t /var/task && \
               cd /var/task && \
               zip -r check_user.zip . && \
-              chown -R 1000:1000 /var/task/*"
+              chown -R 1000:1000 /var/task"
 
       - name: Mover .zip para raiz do projeto
         run: mv build/check_user.zip check_user.zip
@@ -50,8 +50,9 @@ jobs:
       - name: Verificar conteúdo do .zip
         run: unzip -l check_user.zip
 
-      - name: Limpar build temporário
-        run: rm -rf build
+      - name: Forçar remoção da pasta build via Docker (caso permissões bloqueiem)
+        run: |
+          docker run --rm -v "$PWD":/mnt amazonlinux:2 bash -c "rm -rf /mnt/build"
 
       - name: Inicializar o Terraform
         run: terraform init
