@@ -34,6 +34,8 @@ resource "aws_lambda_permission" "allow_apigw" {
   function_name = aws_lambda_function.check_user.function_name
   principal     = "apigateway.amazonaws.com"
   source_arn    = "${aws_apigatewayv2_api.auth.execution_arn}/*/*"
+
+  depends_on = [aws_apigatewayv2_stage.default]
 }
 
 # API Gateway HTTP API
