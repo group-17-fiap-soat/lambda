@@ -25,10 +25,10 @@ jobs:
         with:
           terraform_version: 1.6.6
 
-      - name: Removendo build anterior (se existir)
+      - name: Limpar build anterior (se existir)
         run: |
-          [ -f check_user.zip ] && rm check_user.zip
-          [ -d check_user/__pycache__ ] && rm -rf check_user/__pycache__
+          if [ -f check_user.zip ]; then rm check_user.zip; fi
+          if [ -d check_user/__pycache__ ]; then rm -rf check_user/__pycache__; fi
 
       - name: Compactar a função Lambda
         run: |
