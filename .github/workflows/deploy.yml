@@ -30,20 +30,18 @@ jobs:
           rm -f check_user.zip
           rm -rf build || true
 
-      - name: Preparar pacote Lambda compatível (via Docker Amazon Linux 2)
+      - name: Preparar pacote Lambda compatível (via Docker AWS SAM build image)
         run: |
           mkdir -p build
           cp -r check_user/* build/
-
-          docker run --rm -v "$PWD/build":/var/task \
-            amazonlinux:2 bash -c "\
-              yum install -y gcc postgresql-devel python3 python3-devel zip && \
-              pip3 install --upgrade pip && \
-              pip3 install -r /var/task/requirements.txt -t /var/task && \
-              cd /var/task && \
-              zip -r lambda.zip ."
-
+          
+          docker run --rm -v "$PWD/build":/var/task public.ecr.aws/sam/build-python3.10 bash -c "\
+            pip install -r /var/task/requirements.txt -t /var/task && \
+            cd /var/task && \
+            zip -r lambda.zip ."
+          
           cp build/lambda.zip check_user.zip
+
 
       - name: Verificar conteúdo do .zip
         run: unzip -l check_user.zip
