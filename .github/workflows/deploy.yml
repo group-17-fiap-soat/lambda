@@ -30,6 +30,10 @@ jobs:
           cd check_user
           zip -r ../check_user.zip .
 
+      - name: Instalar dependências
+        run: |
+          pip install -r check_user/requirements.txt -t check_user/
+
       - name: Inicializar o Terraform
         run: terraform init
 
