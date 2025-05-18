@@ -22,6 +22,7 @@ resource "aws_lambda_function" "check_user" {
       DB_USER     = var.db_user
       DB_PASSWORD = var.db_password
       DB_PORT     = var.db_port
+      JWT_SECRET  = var.jwt_secret
     }
   }
 
