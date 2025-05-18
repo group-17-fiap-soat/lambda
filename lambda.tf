@@ -7,7 +7,7 @@ data "aws_iam_role" "role" {
 # Lambda Function
 resource "aws_lambda_function" "check_user" {
   filename         = "check_user.zip"
-  function_name    = "check-user-email"
+  function_name    = "check-user"
   handler          = "lambda_function.lambda_handler"
   runtime          = "python3.10"
   role             = data.aws_iam_role.role.arn
