@@ -8,6 +8,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment: prod
 
     steps:
       - name: Checkout do código
@@ -42,7 +43,6 @@ jobs:
           
           cp build/lambda.zip check_user.zip
 
-
       - name: Verificar conteúdo do .zip
         run: unzip -l check_user.zip
 
@@ -63,7 +63,9 @@ jobs:
           terraform import aws_lambda_permission.allow_apigw check-user/AllowInvoke || true
 
       - name: Validar o Terraform
+        env: ${{ vars }}
         run: terraform validate
 
       - name: Aplicar alterações com Terraform
+        env: ${{ vars }}
         run: terraform apply -auto-approve
