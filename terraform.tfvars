@@ -1,5 +1,0 @@
-db_host         = "fastfood-db.cs34oe66a9rt.us-east-1.rds.amazonaws.com"
-db_name         = "postgres"
-db_user         = "fastfood"
-db_password     = "Teste123"
-jwt_secret      = "nuggetsdearroz"
