@@ -16,7 +16,7 @@ def lambda_handler(event, context):
     )
 
     cur = conn.cursor()
-    cur.execute("SELECT id, name, email FROM tb_customer WHERE cpf = %s", (cpf,))
+    cur.execute("SELECT id, name, email, cpf FROM tb_customer WHERE cpf = %s", (cpf,))
     result = cur.fetchone()
 
     if not result:
@@ -27,9 +27,11 @@ def lambda_handler(event, context):
 
 
     payload = {
+        "iss": "auth.lambda",
         "sub": str(result[0]),
         "name": result[1],
         "email": result[2],
+        "cpf": result[3],
         "exp": datetime.utcnow() + timedelta(hours=1)
     }
 
@@ -37,10 +39,14 @@ def lambda_handler(event, context):
 
     return {
         "statusCode": 200,
+        "headers": {
+            "Content-Type": "application/json"
+        },
         "body": json.dumps({
             "id": result[0],
             "name": result[1],
             "email": result[2],
+            "cpf": result[3],
             "token": token
         })
     }
