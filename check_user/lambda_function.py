@@ -25,7 +25,6 @@ def lambda_handler(event, context):
             "body": json.dumps({"message": "CPF não encontrado"})
         }
 
-
     payload = {
         "sub": str(result[0]),
         "name": result[1],
