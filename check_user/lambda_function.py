@@ -25,7 +25,6 @@ def lambda_handler(event, context):
             "body": json.dumps({"message": "CPF não encontrado"})
         }
 
-
     payload = {
         "iss": "auth.lambda",
         "sub": str(result[0]),
